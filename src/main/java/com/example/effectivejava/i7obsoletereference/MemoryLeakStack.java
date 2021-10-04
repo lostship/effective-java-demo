@@ -23,6 +23,7 @@ public class MemoryLeakStack {
     /**
      * 元素出栈后，对象实际还被数组引用着，因此随着数组容量越来越大，大量下标大于等于size的对象不会被GC回收，造成内存泄露
      */
+    @Deprecated
     public Object badPop() {
         if (size == 0) {
             throw new EmptyStackException();

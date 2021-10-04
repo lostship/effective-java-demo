@@ -12,7 +12,7 @@ public interface Collection<E> {
     void remove(int i);
 
     /**
-     * 接口增加或者修改缺省方法，也有可能对实现类造成破坏。
+     * 接口增加缺省方法，也有可能对实现类造成破坏。
      * 
      * 比如此处增加了一个非线程安全的removeIf方法，
      * SynchronizedCollection的实现者不知道这一变化，并没有重写removeIf方法，
