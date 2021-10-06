@@ -1,4 +1,4 @@
-package com.example.effectivejava.i28listorarray;
+package com.example.effectivejava.i28genericlistorarray;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class ArrayCollection {
          * 虽然堆污染在这种情况下并没有什么危害。
          */
         @SuppressWarnings("unchecked")
-        public ChooserGenericArrayImpl(Collection<E> choices) {
+        public ChooserGenericArrayImpl(Collection<? extends E> choices) {
             choiceArray = (E[]) choices.toArray(); // 此处的强转是假象，泛型擦除后T[]就是Object[]
         }
 
@@ -64,7 +64,7 @@ public class ArrayCollection {
         /**
          * 运行时报错，泛型擦除后无法将Object[]转换成Comparable[]
          */
-        public FailChooser(Collection<E> choices) {
+        public FailChooser(Collection<? extends E> choices) {
             @SuppressWarnings("unchecked")
             E[] ta = (E[]) choices.toArray();
             choiceArray = ta;
@@ -83,7 +83,7 @@ public class ArrayCollection {
         private final Object[] choiceArray;
         private static final int DEFAULT_INITIAL_CAPACITY = 16;
 
-        public ChooserObjectArrayImpl(Collection<E> choices) {
+        public ChooserObjectArrayImpl(Collection<? extends E> choices) {
             choiceArray = choices.toArray();
         }
 
@@ -106,7 +106,7 @@ public class ArrayCollection {
         private final List<E> choiceList;
         private static final int DEFAULT_INITIAL_CAPACITY = 16;
 
-        public ChooserListImpl(Collection<E> choices) {
+        public ChooserListImpl(Collection<? extends E> choices) {
             choiceList = new ArrayList<>(choices);
         }
 

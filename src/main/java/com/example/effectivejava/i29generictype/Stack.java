@@ -1,9 +1,10 @@
-package com.example.effectivejava.i29generic;
+package com.example.effectivejava.i29generictype;
 
 import java.util.Arrays;
 import java.util.EmptyStackException;
 
-import com.example.effectivejava.i28listorarray.ArrayCollection.ChooserObjectArrayImpl;
+import com.example.effectivejava.i21interface.Collection;
+import com.example.effectivejava.i28genericlistorarray.ArrayCollection.ChooserObjectArrayImpl;
 
 /**
  * 将i7的Stack泛型化（generify），同时保持已有的非参数化类型版本的客户端代码的移植兼容性（migration compatible）。
@@ -43,6 +44,24 @@ public class Stack<E> {
         E result = elements[--size];
         elements[size] = null; // eliminate obsolete reference
         return result;
+    }
+
+    /**
+     * @param src 有限定通配符类型（bounded wildcard type）
+     */
+    public void pushAll(Iterable<? extends E> src) {
+        for (E e : src) {
+            push(e);
+        }
+    }
+
+    /**
+     * @param dst 有限定通配符类型（bounded wildcard type）
+     */
+    public void popAll(Collection<? super E> dst) {
+        while (!isEmpty()) {
+            dst.add(pop());
+        }
     }
 
     public boolean isEmpty() {
