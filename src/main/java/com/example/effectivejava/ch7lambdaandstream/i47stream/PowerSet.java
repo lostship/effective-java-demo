@@ -33,6 +33,8 @@ public class PowerSet {
     }
 
     public static final <E> Collection<Set<E>> of(Set<E> s) {
+        // 注意这里先进行保护性拷贝，再对拷贝之后的对象进行参数的有效性检查
+        // 避免原始对象在参数检查到拷贝期间被其它线程改变（TOCTOU攻击，Time-Of-Check/Time-Of-Use）
         List<E> src = new ArrayList<>(s);
         if (src.size() > 30) {
             // Collection的size最大只能支持Integer.MAX_VALUE = 2 power 31 - 1
