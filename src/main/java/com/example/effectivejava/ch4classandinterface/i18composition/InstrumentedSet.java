@@ -1,4 +1,4 @@
-package com.example.effectivejava.ch4classandinterface.i18consistant;
+package com.example.effectivejava.ch4classandinterface.i18composition;
 
 import java.util.Collection;
 import java.util.Set;
