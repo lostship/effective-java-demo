@@ -11,11 +11,46 @@ import java.util.function.IntFunction;
  * 泛型 - 列表和数组
  * 
  * 数组是协变的（convariant，如果Sub是Super的子类，Sub[]就是Super[]的子类），可具体化的（reifiable）；
- * 泛型是不可变的（invariant），不可具体化的（non-reifiable，运行时会被擦除，运行时表示法包含的信息比编译时表示法包含的信息更少）。
+ * 泛型是不变的（invariant，List<Sub>不是List<Super>的子类），
+ * 不可具体化的（non-reifiable，运行时会被擦除，运行时表示法包含的信息比编译时表示法包含的信息更少）。
  * 
  * 因此数组和泛型通常不能很好地混合使用，如果混合使用时得到编译错误或警告，第一反应就应该是使用列表代替数组。
  */
 public class ArrayCollection {
+    
+    /**
+     * 泛型是invariant的，否则在运行时会产生类型转换错误
+     */
+    public void invariant() {
+        // Won't compile!
+        // List<Object> ol = new ArrayList<Long>(); // Incompatible types
+        // ol.add("I don't fit in");
+    }
+    
+    /**
+     * 为什么创建泛型数组是非法的？因为它不是类型安全的。
+     * 要是它合法，编译器在其他正确的程序中发生的转换就会在运行时失败，
+     * 并出现ClassCastException异常。这就违背了泛型系统提供的基本保证。
+     * 
+     * 假设第1行是合法的，它创建了一个泛型数组。
+     * 第2行创建并初始化了一个包含单个元素的List<Integer>。
+     * 第3行将List<String>数组保存到一个Object数组变量中，这是合法的，因为数组是协变的。
+     * 第4行将List<Integer>保存到Object 数组里唯一的元素中，这是可以的，因为泛型是通过擦除实现的：
+     * List<Integer>实例的运行时类型只是List，List<String>[]实例的运行时类型则是List[]，
+     * 因此这种安排不会产生 ArrayStoreException异常。
+     * 但现在有麻烦了，我们将一个List<Integer>实例保存到了原本声明只包含List<String>实例的数组中。
+     * 在第5行中，我们从这个数组里唯一的列表中获取了唯一的元素，编译器自动地将获取到的元素转换成String，
+     * 但它是一个Integer，因此我们在运行时得到了一个ClassCastException异常。
+     * 为了防止出现这种情况，第1行创建泛型数组的语句必须产生一条编译时错误。
+     */
+    public void whyGenericArrayCreationIsIllegal() {
+        // Won't compile!
+        // List<String>[] stringLists = new List<String>[l];  // (1)
+        // List<Integer> intList = List.of(42);               // (2)
+        // Object[] objects = stringLists;                    // (3)
+        // objects[0] = intList;                              // (4)
+        // String s = stringLists[0].get(0);                  // (5)
+    }
 
     public static class ChooserGenericArrayImpl<E> {
         private final E[] choiceArray;
